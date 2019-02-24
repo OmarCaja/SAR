@@ -22,13 +22,22 @@ def sort_dic(d):
     for key, value in sorted(d.items(), key=itemgetter(1), reverse=True):
         yield key, value
 
+def to_lower_case(sentence):
+    return sentence.lower()
+
 def text_statistics(filename, to_lower, remove_stopwords):
     global line_counter
     file_doc = open(filename, 'r')
+
     for sentence in file_doc.readlines():
         line_counter = line_counter + 1
         sentence = clean_text(sentence)
+
+        if to_lower:
+           sentence = to_lower_case(sentence)
+
         count_words(sentence)
+        
     return stats()
 
 def count_words(sentence):
