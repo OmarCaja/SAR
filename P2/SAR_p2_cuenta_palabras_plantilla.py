@@ -11,6 +11,7 @@ dict_symbols = {}
 
 line_counter = 0
 word_counter = 0
+stopwords_counter = 0
 symbol_counter = 0
 
 clean_re = re.compile('\W+')
@@ -36,14 +37,21 @@ def text_statistics(filename, to_lower, remove_stopwords):
         if to_lower:
            sentence = to_lower_case(sentence)
 
-        count_words(sentence)
+        count_words(sentence, remove_stopwords)
         
     return stats()
 
-def count_words(sentence):
+def count_words(sentence, remove_stopwords):
     global word_counter
+    global stopwords_counter
+
     for word in sentence.split():
         word_counter += 1
+
+        if remove_stopwords and word in stopwords:
+            stopwords_counter += 1
+            continue
+
         count_symbols(word)
         dict_words[word] = dict_words.get(word, 0) + 1
 
@@ -56,6 +64,7 @@ def count_symbols(word):
 def stats():
     print(line_counter)
     print(word_counter)
+    print(word_counter - stopwords_counter)
     print(symbol_counter)
     print(len(dict_words))
     print(len(dict_symbols))
