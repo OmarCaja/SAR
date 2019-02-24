@@ -1,5 +1,5 @@
 #! /usr/bin/python
-#! -*- encoding: utf8 -*-
+
 
 from operator import itemgetter
 import re
@@ -22,9 +22,9 @@ def sort_dic(d):
     for key, value in sorted(d.items(), key=itemgetter(1), reverse=True):
         yield key, value
 
-def text_statistics(filename, to_lower=True, remove_stopwords=True):
+def text_statistics(filename, to_lower, remove_stopwords):
     global line_counter
-    file_doc = open(name, 'r')
+    file_doc = open(filename, 'r')
     for sentence in file_doc.readlines():
         line_counter = line_counter + 1
         sentence = clean_text(sentence)
@@ -35,9 +35,8 @@ def count_words(sentence):
     global word_counter
     for word in sentence.split():
         word_counter += 1
-        if word.lower() not in stopwords:
-            dict_words[word] = dict_words.get(word, 0) + 1
-            count_symbols(word)
+        count_symbols(word)
+        dict_words[word] = dict_words.get(word, 0) + 1
 
 def count_symbols(word):
     global symbol_counter
@@ -49,6 +48,8 @@ def stats():
     print(line_counter)
     print(word_counter)
     print(symbol_counter)
+    print(len(dict_words))
+    print(len(dict_symbols))
 
 def syntax():
     print ("\n%s filename.txt [to_lower?[remove_stopwords?]\n" % sys.argv[0])
@@ -70,4 +71,3 @@ if __name__ == "__main__":
         if len(sys.argv) > 3:
             stop = (sys.argv[3] in ('1', 'True', 'yes'))
     text_statistics(name, to_lower=lower, remove_stopwords=stop)
-
