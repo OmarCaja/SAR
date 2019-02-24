@@ -22,6 +22,15 @@ def sort_dic(d):
     for key, value in sorted(d.items(), key=itemgetter(1), reverse=True):
         yield key, value
 
+def print_dic_alphabetically(d):
+    alphabetical_keys = sorted(d.keys())
+    for key in alphabetical_keys:
+        print('\t' + str(key) + ' ' + str(d[key]))
+
+def print_dic_by_frecuency(d):
+    for item in sort_dic(d):
+        print('\t' + str(item[0]) + ' ' + str(item[1]))
+
 def to_lower_case(sentence):
     return sentence.lower()
 
@@ -35,10 +44,10 @@ def text_statistics(filename, to_lower, remove_stopwords):
 
         if to_lower:
            sentence = to_lower_case(sentence)
-           
+
         count_words(sentence, remove_stopwords)
         
-    return stats()
+    return stats(remove_stopwords)
 
 def count_words(sentence, remove_stopwords):
     global word_counter
@@ -61,13 +70,28 @@ def count_symbols(word):
         symbol_counter += 1
         dict_symbols[symbol] = dict_symbols.get(symbol, 0) + 1
             
-def stats():
-    print(line_counter)
-    print(word_counter)
-    print(word_counter - stopwords_counter)
-    print(symbol_counter)
-    print(len(dict_words))
-    print(len(dict_symbols))
+def stats(remove_stopwords):
+    print('Lines: ' + str(line_counter))
+    print('Number of words (with stopwords): ' + str(word_counter))
+
+    if remove_stopwords:
+        print('Number of words (without stopwords): ' + str(word_counter - stopwords_counter))
+
+    print('Vocabulary size:' + str(len(dict_words)))
+    print('Number of symbols: ' + str(symbol_counter))
+    print('Number of different symbols: ' + str(len(dict_symbols)))
+
+    print('Words (alphabetical order):')
+    print_dic_alphabetically(dict_words)
+
+    print('Words (by frequency):')
+    print_dic_by_frecuency(dict_words)
+
+    print('Symbols (alphabetical order):')
+    print_dic_alphabetically(dict_symbols)
+
+    print('Symbols (by frequency):')
+    print_dic_by_frecuency(dict_symbols)
 
 def syntax():
     print ("\n%s filename.txt [to_lower?][remove_stopwords?]\n" % sys.argv[0])
