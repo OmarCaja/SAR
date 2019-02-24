@@ -1,6 +1,5 @@
 #! /usr/bin/python
 
-
 from operator import itemgetter
 import re
 import sys
@@ -36,7 +35,7 @@ def text_statistics(filename, to_lower, remove_stopwords):
 
         if to_lower:
            sentence = to_lower_case(sentence)
-
+           
         count_words(sentence, remove_stopwords)
         
     return stats()
@@ -57,6 +56,7 @@ def count_words(sentence, remove_stopwords):
 
 def count_symbols(word):
     global symbol_counter
+
     for symbol in word:
         symbol_counter += 1
         dict_symbols[symbol] = dict_symbols.get(symbol, 0) + 1
@@ -70,7 +70,7 @@ def stats():
     print(len(dict_symbols))
 
 def syntax():
-    print ("\n%s filename.txt [to_lower?[remove_stopwords?]\n" % sys.argv[0])
+    print ("\n%s filename.txt [to_lower?][remove_stopwords?]\n" % sys.argv[0])
     sys.exit()
 
 if __name__ == "__main__":
