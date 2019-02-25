@@ -34,6 +34,9 @@ def print_dic_by_frecuency(d):
 def to_lower_case(sentence):
     return sentence.lower()
 
+def text_statistics_extra(filename, to_lower, remove_stopwords):
+    return None
+
 def text_statistics(filename, to_lower, remove_stopwords):
     global line_counter
     file_doc = open(filename, 'r')
@@ -94,7 +97,7 @@ def stats(remove_stopwords):
     print_dic_by_frecuency(dict_symbols)
 
 def syntax():
-    print ("\n%s filename.txt [to_lower?][remove_stopwords?]\n" % sys.argv[0])
+    print ("\n%s filename.txt [to_lower?][remove_stopwords?][extra?]\n" % sys.argv[0])
     sys.exit()
 
 if __name__ == "__main__":
@@ -112,4 +115,8 @@ if __name__ == "__main__":
         lower = (sys.argv[2] in ('1', 'True', 'yes'))
         if len(sys.argv) > 3:
             stop = (sys.argv[3] in ('1', 'True', 'yes'))
-    text_statistics(name, to_lower=lower, remove_stopwords=stop)
+
+    if 'extra' in sys.argv:
+        text_statistics_extra(name, to_lower=lower, remove_stopwords=stop)
+    else:
+        text_statistics(name, to_lower=lower, remove_stopwords=stop)
