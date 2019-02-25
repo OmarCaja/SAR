@@ -45,9 +45,16 @@ def text_statistics(filename, to_lower, remove_stopwords, extra):
         if to_lower:
            sentence = to_lower_case(sentence)
 
+        if extra:
+            sentence = '$ ' + sentence + ' $'
+            count_bigrams(sentence)
+
         count_words(sentence, remove_stopwords)
         
     return stats(remove_stopwords)
+
+def count_bigrams(sentence):
+    return None
 
 def count_words(sentence, remove_stopwords):
     global word_counter
