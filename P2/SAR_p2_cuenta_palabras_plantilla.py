@@ -19,7 +19,7 @@ def clean_text(text):
     return clean_re.sub(' ', text)
 
 def sort_dic(d):
-    for key, value in sorted(d.items(), key=itemgetter(1), reverse=True):
+    for key, value in sorted(d.items(), key=lambda a: (-a[1], a[0])):
         yield key, value
 
 def print_dic_alphabetically(d):
