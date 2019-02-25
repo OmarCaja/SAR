@@ -34,10 +34,7 @@ def print_dic_by_frecuency(d):
 def to_lower_case(sentence):
     return sentence.lower()
 
-def text_statistics_extra(filename, to_lower, remove_stopwords):
-    return None
-
-def text_statistics(filename, to_lower, remove_stopwords):
+def text_statistics(filename, to_lower, remove_stopwords, extra):
     global line_counter
     file_doc = open(filename, 'r')
 
@@ -111,12 +108,11 @@ if __name__ == "__main__":
 
     lower = False
     stop = False
+    extra = 'extra' in sys.argv
+
     if len(sys.argv) > 2:
         lower = (sys.argv[2] in ('1', 'True', 'yes'))
         if len(sys.argv) > 3:
             stop = (sys.argv[3] in ('1', 'True', 'yes'))
-
-    if 'extra' in sys.argv:
-        text_statistics_extra(name, to_lower=lower, remove_stopwords=stop)
-    else:
-        text_statistics(name, to_lower=lower, remove_stopwords=stop)
+    
+    text_statistics(name, to_lower=lower, remove_stopwords=stop, extra=extra)
