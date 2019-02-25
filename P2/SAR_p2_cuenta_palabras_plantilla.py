@@ -25,11 +25,11 @@ def sort_dic(d):
 def print_dic_alphabetically(d):
     alphabetical_keys = sorted(d.keys())
     for key in alphabetical_keys:
-        print('\t' + str(key) + ' ' + str(d[key]))
+        print('\t' + str(key) + '\t' + str(d[key]))
 
 def print_dic_by_frecuency(d):
     for item in sort_dic(d):
-        print('\t' + str(item[0]) + ' ' + str(item[1]))
+        print('\t' + str(item[0]) + '\t' + str(item[1]))
 
 def to_lower_case(sentence):
     return sentence.lower()
@@ -77,7 +77,7 @@ def stats(remove_stopwords):
     if remove_stopwords:
         print('Number of words (without stopwords): ' + str(word_counter - stopwords_counter))
 
-    print('Vocabulary size:' + str(len(dict_words)))
+    print('Vocabulary size: ' + str(len(dict_words)))
     print('Number of symbols: ' + str(symbol_counter))
     print('Number of different symbols: ' + str(len(dict_symbols)))
 
