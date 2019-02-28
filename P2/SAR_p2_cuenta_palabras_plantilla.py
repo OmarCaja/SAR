@@ -1,5 +1,12 @@
 #! /usr/bin/python
 
+'''
+    Jose Antonio Culla de Moya
+    Omar Caja Garcia
+
+    Se ha implementado la amplliacion
+'''
+
 from operator import itemgetter
 import re
 import sys
@@ -8,6 +15,7 @@ stopwords = []
 dict_words = {}
 dict_symbols = {}
 dict_bigrams = {}
+dict_bisymbols = {}
 
 line_counter = 0
 word_counter = 0
@@ -47,16 +55,26 @@ def text_statistics(filename, to_lower, remove_stopwords, extra):
            sentence = to_lower_case(sentence)
 
         if extra:
-            count_bigrams('$ ' + sentence + ' $')
+            count_bigrams('$ ' + sentence + ' $', remove_stopwords)
 
         count_words(sentence, remove_stopwords)
-        
-    return stats(remove_stopwords)
+    return stats(remove_stopwords, extra)
 
-def count_bigrams(sentence):
-	for word1, word2 in zip(sentence[:-1], sentence[1:])
-		bigram = word1 + ' ' + word2
-		dict_bigrams[bigram] = dict_bigrams.get(bigram, 0) + 1
+def count_bigrams(sentence, remove_stopwords):
+
+    for word1, word2 in zip(sentence.split()[:-1], sentence.split()[1:]):
+        bigram = word1 + ' ' + word2
+
+        if remove_stopwords and word1 in stopwords:
+            dict_bigrams[bigram] = dict_bigrams.get(bigram, 0) + 1
+            continue
+
+        count_bisymbols(word1)
+        dict_bigrams[bigram] = dict_bigrams.get(bigram, 0) + 1
+
+def count_bisymbols(word):
+    for symbol1, symbol2 in zip(word[:-1], word[1:]):
+        dict_bisymbols[symbol1 + symbol2] = dict_bisymbols.get(symbol1 + symbol2, 0) + 1
 
 def count_words(sentence, remove_stopwords):
     global word_counter
@@ -79,12 +97,12 @@ def count_symbols(word):
         symbol_counter += 1
         dict_symbols[symbol] = dict_symbols.get(symbol, 0) + 1
             
-def stats(remove_stopwords):
+def stats(remove_stopwords, extra):
     print('Lines: ' + str(line_counter))
-    print('Number of words (with stopwords): ' + str(word_counter))
+    print('Number words (with stopwords): ' + str(word_counter))
 
     if remove_stopwords:
-        print('Number of words (without stopwords): ' + str(word_counter - stopwords_counter))
+        print('Number words (without stopwords): ' + str(word_counter - stopwords_counter))
 
     print('Vocabulary size: ' + str(len(dict_words)))
     print('Number of symbols: ' + str(symbol_counter))
@@ -101,6 +119,19 @@ def stats(remove_stopwords):
 
     print('Symbols (by frequency):')
     print_dic_by_frecuency(dict_symbols)
+
+    if (extra):
+        print('Word pairs (alphabetical order):')
+        print_dic_alphabetically(dict_bigrams)
+
+        print('Word pairs (by frequency):')
+        print_dic_by_frecuency(dict_bigrams)
+
+        print('Symbol pairs (alphabetical order):')
+        print_dic_alphabetically(dict_bisymbols)
+
+    print('Symbol pairs (by frequency):')
+    print_dic_by_frecuency(dict_bisymbols)
 
 def syntax():
     print ("\n%s filename.txt [to_lower?][remove_stopwords?][extra?]\n" % sys.argv[0])
