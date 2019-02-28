@@ -7,6 +7,7 @@ import sys
 stopwords = []
 dict_words = {}
 dict_symbols = {}
+dict_bigrams = {}
 
 line_counter = 0
 word_counter = 0
@@ -53,7 +54,9 @@ def text_statistics(filename, to_lower, remove_stopwords, extra):
     return stats(remove_stopwords)
 
 def count_bigrams(sentence):
-    return None
+	for word1, word2 in zip(sentence[:-1], sentence[1:])
+		bigram = word1 + ' ' + word2
+		dict_bigrams[bigram] = dict_bigrams.get(bigram, 0) + 1
 
 def count_words(sentence, remove_stopwords):
     global word_counter
