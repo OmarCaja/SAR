@@ -15,7 +15,9 @@ def crear_indice(frases):
         
 
 def obtener_frases(texto):
-    return 1
+    return texto.replace(";", "\n\n").replace("!", "\n\n") \
+        .replace(".", "\n\n").replace("?","\n\n") \
+        .lower().split("\n\n")
 
 def formatear_indice(index):
     return 1
@@ -34,6 +36,7 @@ if __name__ == "__main__":
         texto = "".join(input.readlines())
         input.close()
         frases = obtener_frases(texto)
+        print(frases)
         index = crear_indice(frases)
         index = formatear_indice(index)
         guardar_indice(sys.argv[2])
