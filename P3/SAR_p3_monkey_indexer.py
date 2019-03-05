@@ -1,10 +1,12 @@
 #!/usr/bin/python
 
 import sys
+import re
 
 def crear_indice(frases):
     index = {}
     for frase in frases:
+        frase = "$ " + clean_text(frase) + " $"
         for word1, word2 in zip(frase.split()[:-1], frase.split()[1:]):
             if (index.get(word1)):
                 index[word1][0] += 1
@@ -13,6 +15,10 @@ def crear_indice(frases):
                 index[word1] = [1, {word2 : 1}]
     return index
         
+clean_re = re.compile('\W+')
+
+def clean_text(text):
+    return clean_re.sub(' ', text)
 
 def obtener_frases(texto):
     return texto.replace(";", "\n\n").replace("!", "\n\n") \
@@ -36,7 +42,7 @@ if __name__ == "__main__":
         texto = "".join(input.readlines())
         input.close()
         frases = obtener_frases(texto)
-        print(frases)
         index = crear_indice(frases)
+        print(index)
         index = formatear_indice(index)
         guardar_indice(sys.argv[2])
