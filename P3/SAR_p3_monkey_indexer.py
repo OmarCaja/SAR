@@ -29,10 +29,14 @@ def obtener_frases(texto):
 def formatear_indice(index):
     for key, value in index.items():
         word_list = []
-        for key2, value2 in value[1].items():
+        for key2, value2 in sort_dic(value[1]):
             word_list.append((value2, key2))
         index[key] = (value[0], word_list)
     return index
+
+def sort_dic(d):
+    for key, value in sorted(d.items(), key=lambda a: (-a[1], a[0])):
+        yield key, value
 
 def guardar_indice(indice, filename):
     with open(filename, "wb") as fh:
