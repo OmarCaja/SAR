@@ -55,5 +55,4 @@ if __name__ == "__main__":
         frases = obtener_frases(texto)
         index = crear_indice(frases)
         index = formatear_indice(index)
-        print(index)
         guardar_indice(index, sys.argv[2])
