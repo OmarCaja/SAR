@@ -2,6 +2,7 @@
 
 import sys
 import re
+import pickle
 
 def crear_indice(frases):
     index = {}
@@ -26,10 +27,16 @@ def obtener_frases(texto):
         .lower().split("\n\n")
 
 def formatear_indice(index):
-    return 1
+    for key, value in index.items():
+        word_list = []
+        for key2, value2 in value[1].items():
+            word_list.append((value2, key2))
+        index[key] = (value[0], word_list)
+    return index
 
-def guardar_indice(filename):
-    return None
+def guardar_indice(indice, filename):
+    with open(filename, "wb") as fh:
+        pickle.dump(indice, fh)
 
 def syntax_error():
     print("debe introducir como argumento el nombre de dos ficheros")
@@ -43,6 +50,6 @@ if __name__ == "__main__":
         input.close()
         frases = obtener_frases(texto)
         index = crear_indice(frases)
-        print(index)
         index = formatear_indice(index)
-        guardar_indice(sys.argv[2])
+        print(index)
+        guardar_indice(index, sys.argv[2])
