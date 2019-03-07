@@ -19,6 +19,16 @@ def generate_sentence(index):
         word = next_word(index[word][1])
         sentence = sentence + " " + word
     return sentence
+
+def generate_sentence_tri(index):
+    word = next_word(index[tuple(["$", "$"])][1])
+    sentence = "$ " + word
+    while (word != "$" and len(sentence.split()) < 25):
+        words_list = sentence.split()
+        words = [words_list[words_list.index(word)- 1], words_list[words_list.index(word)]]
+        word = next_word(index[tuple(words)][1])
+        sentence = sentence + " " + word
+    return sentence
         
 def next_word(word_occurence_list):
     choice_list = generate_choice_list(word_occurence_list)
@@ -36,5 +46,9 @@ if __name__ == "__main__":
         syntax_error()
     else:
         index = load_index(sys.argv[1])
+        keys = index.keys()
         for i in range(0, 10):
-            print(generate_sentence(index))
+            if(isinstance(keys[0], str)):
+                print(generate_sentence(index))
+            else:
+                print(generate_sentence_tri(index))
