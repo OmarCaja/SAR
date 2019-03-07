@@ -20,7 +20,7 @@ def crear_indice(frases):
 def create_trigram_index(frases):
     index = {}
     for frase in frases:
-        frase = "$ " + clean_text(frase) + " $"
+        frase = "$ $ " + clean_text(frase) + " $"
         for word1, word2, word3 in zip(frase.split()[:-1], frase.split()[1:], frase.split()[2:]):
             if (index.get(tuple([word1, word2]))):
                 index[tuple(tuple([word1, word2]))][0] += 1
