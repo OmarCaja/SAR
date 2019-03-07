@@ -3,6 +3,7 @@
 import sys
 import re
 import pickle
+import argparse
 
 def crear_indice(frases):
     index = {}
@@ -15,6 +16,9 @@ def crear_indice(frases):
             else:
                 index[word1] = [1, {word2 : 1}]
     return index
+
+def create_trigram_index():
+    return {}
         
 clean_re = re.compile('\W+')
 
@@ -46,13 +50,24 @@ def syntax_error():
     print("debe introducir como argumento el nombre de dos ficheros")
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        syntax_error()
+    parser = argparse.ArgumentParser(description="")
+    parser.add_argument("text_filename", help="fichero de texto de entrada")
+    parser.add_argument("index_filename", help="fichero de salida")
+    parser.add_argument("-tri", action="store_true",help="argumento que indica si se desea el indice con trigramas")
+    
+    args = parser.parse_args()
+    input_filename = args.text_filename
+    output_filename = args.index_filename
+
+    input = open(input_filename, "r")
+    texto = "".join(input.readlines())
+    input.close()
+    frases = obtener_frases(texto)
+
+    if args.tri:
+        index = create_trigram_index()
     else:
-        input = open(sys.argv[1], "r")
-        texto = "".join(input.readlines())
-        input.close()
-        frases = obtener_frases(texto)
         index = crear_indice(frases)
-        index = formatear_indice(index)
-        guardar_indice(index, sys.argv[2])
+
+    index = formatear_indice(index)
+    guardar_indice(index, output_filename)
