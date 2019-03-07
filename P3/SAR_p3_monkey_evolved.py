@@ -1,5 +1,13 @@
 #!/usr/bin/python
 
+'''
+Jose Antonio Culla de Moya
+Omar Caja García
+
+Implementada la ampliacion, no es necesario ningun comando especial
+
+'''
+
 import sys
 import pickle
 import random

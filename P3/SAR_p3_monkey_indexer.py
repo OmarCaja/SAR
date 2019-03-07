@@ -1,5 +1,14 @@
 #!/usr/bin/python
 
+'''
+Jose Antonio Culla de Moya
+Omar Caja García
+
+Implementada la ampliación mediante la opcion -tri para generar el indice de trigramas
+Opcion -h para ver la ayuda
+
+'''
+
 import sys
 import re
 import pickle
