@@ -17,8 +17,17 @@ def crear_indice(frases):
                 index[word1] = [1, {word2 : 1}]
     return index
 
-def create_trigram_index():
-    return {}
+def create_trigram_index(frases):
+    index = {}
+    for frase in frases:
+        frase = "$ " + clean_text(frase) + " $"
+        for word1, word2, word3 in zip(frase.split()[:-1], frase.split()[1:], frase.split()[2:]):
+            if (index.get(tuple([word1, word2]))):
+                index[tuple(tuple([word1, word2]))][0] += 1
+                index[tuple([word1, word2])][1][word3] = index[tuple([word1, word2])][1].get(word3, 0) + 1
+            else:
+                index[tuple([word1, word2])] = [1, {word3 : 1}]
+    return index
         
 clean_re = re.compile('\W+')
 
@@ -65,9 +74,10 @@ if __name__ == "__main__":
     frases = obtener_frases(texto)
 
     if args.tri:
-        index = create_trigram_index()
+        index = create_trigram_index(frases)
     else:
         index = crear_indice(frases)
 
     index = formatear_indice(index)
+    print(index)
     guardar_indice(index, output_filename)
