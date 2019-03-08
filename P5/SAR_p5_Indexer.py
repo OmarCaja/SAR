@@ -3,12 +3,19 @@
 import os
 from whoosh.index import create_in
 from whoosh.fields import Schema, ID, TEXT
+import argparse
 
 if __name__ == "__main__":
 
-    schema = Schema(title=TEXT(stored=True), path=ID(stored=True), content=TEXT)
-    idir = "index_dir"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("doc_directory", help="directory where docs for teh index are")
+    parser.add_argument("index_directory", help="directory where the index will be saved")
 
+    args = parser.parse_args()
+
+    schema = Schema(title=TEXT(stored=True), path=ID(stored=True), content=TEXT)
+    idir = args.index_directory
+    
     if not os.path.exists(idir):
         os.mkdir(idir)
     ix = create_in(idir, schema)
