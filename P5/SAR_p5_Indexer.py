@@ -2,13 +2,14 @@
 
 import os
 from whoosh.index import create_in
-from whoosh.fields import Schema, ID, TEXT
+from whoosh.fields import Schema, ID, TEXT, KEYWORD, DATETIME
 import argparse
 import json
 
 def add_to_index(file, index):
     writer = index.writer()
-    writer.add_document(title=file["title"], path=file["url"], content=file["article"])
+    writer.add_document(id=file["id"], title=file["title"], article=file["article"],
+        keywords=file["keywords"], date=file["date"])
     writer.commit()
 
 def get_file(docs_dir):
@@ -21,7 +22,7 @@ def get_file_info(filename):
         return json.load(fh)
 
 def create_index(index_dir):
-    schema = Schema(title=TEXT(stored=True), path=ID(stored=True), content=TEXT)
+    schema = Schema(id=ID, title=TEXT(stored=True), article=TEXT, keywords=KEYWORD, date=DATETIME)
     
     if not os.path.exists(index_dir):
         os.mkdir(index_dir)
