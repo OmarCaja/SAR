@@ -31,7 +31,7 @@ def print_results(results, extended):
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(usage=syntax())
-    parser.add_argument("index", help="index file")
+    parser.add_argument("index", help="index directory")
     parser.add_argument("-q", help="query to search")
     parser.add_argument("--extend", action="store_true", help="indicates if you want all the information")
 
