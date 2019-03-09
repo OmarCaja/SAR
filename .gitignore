@@ -1,1 +1,5 @@
+#Ignore vscode files
 .vscode
+
+#ignore index files P5
+index/
