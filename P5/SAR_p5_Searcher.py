@@ -7,6 +7,27 @@ import argparse
 def syntax():
     return "python SAR_p5_Searcher.py index_directory [-q=query] [--extend]"
 
+def search(text, index):
+    with index.searcher() as searcher:
+        query = QueryParser("article", index.schema).parse(text)
+        return searcher.search(query)
+
+def print_default(results):
+    for result in results:
+        print(result)
+
+def print_extended(results):
+    for result in results:
+        print(result)
+
+def print_results(results, extended):
+    if extended:
+        print_extended(results)
+    else:
+        print_default(results)
+    print("=================")
+    print(len(results) + "results")
+
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(usage=syntax())
@@ -16,17 +37,17 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    ix = open_dir(args.index)
-    with ix.searcher() as searcher:
-        if args.q:
-            hola = 1
-        else:
-            while True:
-                text = input("Dime:")
-                if len(text) == 0:
-                    break
-                query = QueryParser("content", ix.schema).parse(text)
-                results = searcher.search(query)
-                for r in results:
-                    print(r)
+    index = open_dir(args.index)
+    
+    if args.q:
+        results = search(args.q, index)
+        print_results(results, args.extend)
+    else:
+        while True:
+            text = input("Dime:")
+            if len(text) == 0:
+                break
+            results = search(text, index)
+            print_results(results, args.extend)
+                    
 
