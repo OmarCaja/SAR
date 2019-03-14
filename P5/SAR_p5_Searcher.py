@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+'''
+Jose Antonio Culla de Moya
+Omar Caja Garcia
+'''
+
 from whoosh.index import open_dir
 from whoosh.qparser import QueryParser
 import argparse

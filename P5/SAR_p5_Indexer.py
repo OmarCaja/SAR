@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+'''
+Jose Antonio Culla de Moya
+Omar Caja Garcia
+'''
+
 import os
 from whoosh.index import create_in
 from whoosh.fields import Schema, ID, TEXT, KEYWORD, DATETIME, STORED
