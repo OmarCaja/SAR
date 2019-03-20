@@ -94,8 +94,7 @@ def get_next_url(url_queue):
     
     return url_queue.pop(0)
 
-def add_pending_url(url_queue, url, url_dic):
-    """Anyade url a la cola de urls si no esta todavia en ella o en el diccionario de documentos
+"""Anyade url a la cola de urls si no esta todavia en ella o en el diccionario de documentos
 
         Args:
             url_queue: la cola de urls
@@ -105,8 +104,20 @@ def add_pending_url(url_queue, url, url_dic):
         Returns:
             boolean: True si la url se ha anyadido. False si ya existia
         """
-    # COMPLETAR
-    pass
+def add_pending_url(url_queue, url, url_dic):
+
+    added = False
+
+    is_in_list = url in url_queue
+    is_in_dict = id(url) in url_dic
+
+    if (not is_in_list or not is_in_dict):
+
+        url_queue.append(url)
+        added = True
+
+    return added
+
 
 def add_to_index(index, urlid, text):
     """Anyade el docid correscondiente a una url a las posting list de los terminos contenidos en text
