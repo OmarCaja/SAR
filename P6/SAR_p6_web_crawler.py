@@ -63,9 +63,7 @@ def extract_text(content):
 ############################
 ## WORKING WITH THE INDEX ##
 ############################
-
-def add_processed_url(url_dic, url):
-    """Anyade url al diccionario de documentos (url_dic)
+"""Anyade url al diccionario de documentos (url_dic)
 
     Args:
         url_dic: el diccionario de documentos
@@ -75,8 +73,13 @@ def add_processed_url(url_dic, url):
         int: el docid de url dentro del diccionario
 
     """
-    # COMPLETAR
-    pass
+def add_processed_url(url_dic, url):
+    
+    doc_id = id(url)
+
+    url_dic[id] = url
+
+    return doc_id
 
 def get_next_url(url_queue):
     """Extrae una url de la cola de urls url_queue y la devuelve
