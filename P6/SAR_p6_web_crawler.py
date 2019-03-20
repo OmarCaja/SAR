@@ -81,8 +81,7 @@ def add_processed_url(url_dic, url):
 
     return doc_id
 
-def get_next_url(url_queue):
-    """Extrae una url de la cola de urls url_queue y la devuelve
+"""Extrae una url de la cola de urls url_queue y la devuelve
 
     Args:
         url_queue: la cola de urls
@@ -91,8 +90,9 @@ def get_next_url(url_queue):
         text: una url de la cola
 
     """
-    # COMPLETAR
-    pass
+def get_next_url(url_queue):
+    
+    return url_queue.pop(0)
 
 def add_pending_url(url_queue, url, url_dic):
     """Anyade url a la cola de urls si no esta todavia en ella o en el diccionario de documentos
