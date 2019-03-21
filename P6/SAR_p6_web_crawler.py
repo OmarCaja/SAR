@@ -226,14 +226,12 @@ def info(index, processed, pending):
 
 if __name__ == "__main__":
     MAX = int(sys.argv[1]) if len(sys.argv) > 1 else 10
-    inverted_index, processed_urls, pending_urls, duplicate_control, cortesia = {}, {}, [], [], []
+    inverted_index, processed_urls, pending_urls, duplicate_control, cortesia = {}, {}, [], [], ["",0]
     add_pending_url(pending_urls, "http://www.upv.es", processed_urls)
 
     cortesia_url = 0
     cortesia_count = 1
-    cortesia[cortesia_url] = ""
-    cortesia[cortesia_count] = 0
-    num_max_peticiones = 20
+    num_max_peticiones = 1
 
     for iter in range(MAX):
         url = get_next_url(pending_urls)
@@ -246,14 +244,13 @@ if __name__ == "__main__":
             cortesia[cortesia_url] = base_url
             cortesia[cortesia_count] = 0
 
-        elif (cortesia[cortesia_count] == num_max_peticiones):
+        elif (cortesia[cortesia_count] >= num_max_peticiones):
             
             add_pending_url(pending_urls, url, processed_urls)
             url = get_next_url(pending_urls)
 
-        cortesia[cortesia_count] += cortesia[cortesia_count]
+        cortesia[cortesia_count] += 1
 
-        print(base_url)
         page = download_web(url)
         if page is not None:
             urlid = add_processed_url(processed_urls, url)
