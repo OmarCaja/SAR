@@ -77,7 +77,7 @@ def add_processed_url(url_dic, url):
     
     doc_id = id(url)
 
-    url_dic[id] = url
+    url_dic[doc_id] = url
 
     return doc_id
 
@@ -130,8 +130,14 @@ def add_to_index(index, urlid, text):
         Returns:
             int: numero de terminos procesador
     """
-    # COMPLETAR
-    pass
+
+    processed_terms = 0
+
+    for token in text.split():
+        processed_terms += 1
+        index[token] = index.setdefault(token, []).append(urlid)
+    
+    return processed_terms
 
 def get_posting(index, dic, term):
     """Devuelve una lista con todas las urls donde aparece un termino
