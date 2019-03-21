@@ -1,16 +1,19 @@
 '''
 Autores: Jose Antonio Culla de Moya
-        Omar Caja Garcia
+         Omar Caja Garcia
 
 Ampliaciones implementadas
 
 - Control de duplicados:
     El control de duplicados se ha implementado almacenando los hashes de los textos procesados
     de forma que cuando se va a procesar un nuevo texto se computa su hash y se comprueba que no exista
-    si existe el texto se deja sin procesar
+    si existe el texto se deja sin procesar.
+
+- Cortesía:
+    Obtenemos el nombre del host en la variable: base_url a su vez se ha definifo un número máximo de 
+    peticiones ha realizar al mismo servidor, si el número de peticiones sobrepasa ese umbral se encola esa url
+    y se extrae una nueva de la cola de urls.
 '''
-
-
 
 import bs4
 import colorama
@@ -133,9 +136,7 @@ def add_pending_url(url_queue, url, url_dic):
 
     return added
 
-
-def add_to_index(index, urlid, text, duplicate_control):
-    """Anyade el docid correscondiente a una url a las posting list de los terminos contenidos en text
+"""Anyade el docid correscondiente a una url a las posting list de los terminos contenidos en text
 
         Args:
             index: el indice invertido
@@ -146,7 +147,8 @@ def add_to_index(index, urlid, text, duplicate_control):
         Returns:
             int: numero de terminos procesador
     """
-
+def add_to_index(index, urlid, text, duplicate_control):
+    
     processed_terms = 0
     h = blake2b()
     h.update(text.encode())
@@ -161,8 +163,7 @@ def add_to_index(index, urlid, text, duplicate_control):
             index.setdefault(token,set()).add(urlid)
         return processed_terms
 
-def get_posting(index, dic, term):
-    """Devuelve una lista con todas las urls donde aparece un termino
+"""Devuelve una lista con todas las urls donde aparece un termino
 
         Args:
             index: el indice invertido
@@ -172,6 +173,8 @@ def get_posting(index, dic, term):
         Returns:
             list: una lista con las urls donde aparece term, None si el termino no esta en el indice invertido
     """
+def get_posting(index, dic, term):
+
     result_list = []
     docid_list = list(index.get(term, []))
     for docid in docid_list:
@@ -223,11 +226,34 @@ def info(index, processed, pending):
 
 if __name__ == "__main__":
     MAX = int(sys.argv[1]) if len(sys.argv) > 1 else 10
-    inverted_index, processed_urls, pending_urls, duplicate_control = {}, {}, [], []
+    inverted_index, processed_urls, pending_urls, duplicate_control, cortesia = {}, {}, [], [], []
     add_pending_url(pending_urls, "http://www.upv.es", processed_urls)
+
+    cortesia_url = 0
+    cortesia_count = 1
+    cortesia[cortesia_url] = ""
+    cortesia[cortesia_count] = 0
+    num_max_peticiones = 20
+
     for iter in range(MAX):
         url = get_next_url(pending_urls)
         print('(%d)' % iter, end=' ')
+
+        base_url = "{0.scheme}://{0.netloc}/".format(urlsplit(url))
+
+        if (cortesia[cortesia_url] != base_url):
+
+            cortesia[cortesia_url] = base_url
+            cortesia[cortesia_count] = 0
+
+        elif (cortesia[cortesia_count] == num_max_peticiones):
+            
+            add_pending_url(pending_urls, url, processed_urls)
+            url = get_next_url(pending_urls)
+
+        cortesia[cortesia_count] += cortesia[cortesia_count]
+
+        print(base_url)
         page = download_web(url)
         if page is not None:
             urlid = add_processed_url(processed_urls, url)
