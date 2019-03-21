@@ -1,3 +1,17 @@
+'''
+Autores: Jose Antonio Culla de Moya
+        Omar Caja Garcia
+
+Ampliaciones implementadas
+
+- Control de duplicados:
+    El control de duplicados se ha implementado almacenando los hashes de los textos procesados
+    de forma que cuando se va a procesar un nuevo texto se computa su hash y se comprueba que no exista
+    si existe el texto se deja sin procesar
+'''
+
+
+
 import bs4
 import colorama
 from random import randrange
@@ -6,6 +20,7 @@ import requests
 from requests.exceptions import SSLError, ReadTimeout, ConnectTimeout, ConnectionError
 import sys
 from urllib.parse import urljoin, urlsplit, urlunsplit
+from hashlib import blake2b
 
 colorama.init() # only necessary in windows
 OK = colorama.Fore.GREEN
@@ -119,25 +134,32 @@ def add_pending_url(url_queue, url, url_dic):
     return added
 
 
-def add_to_index(index, urlid, text):
+def add_to_index(index, urlid, text, duplicate_control):
     """Anyade el docid correscondiente a una url a las posting list de los terminos contenidos en text
 
         Args:
             index: el indice invertido
             urlid: el docid de la url
             text: el texto que se debe procesar
+            duplicate_control: lista con hashes de texto ya procesado
 
         Returns:
             int: numero de terminos procesador
     """
 
     processed_terms = 0
+    h = blake2b()
+    h.update(text.encode())
+    hash = h.hexdigest()
 
-    for token in text.split():
-        processed_terms += 1
-        index.setdefault(token,set()).add(urlid)
-    
-    return processed_terms
+    if (hash in duplicate_control):
+        return 0
+    else:
+        duplicate_control.append(hash)
+        for token in text.split():
+            processed_terms += 1
+            index.setdefault(token,set()).add(urlid)
+        return processed_terms
 
 def get_posting(index, dic, term):
     """Devuelve una lista con todas las urls donde aparece un termino
@@ -201,7 +223,7 @@ def info(index, processed, pending):
 
 if __name__ == "__main__":
     MAX = int(sys.argv[1]) if len(sys.argv) > 1 else 10
-    inverted_index, processed_urls, pending_urls = {}, {}, []
+    inverted_index, processed_urls, pending_urls, duplicate_control = {}, {}, [], []
     add_pending_url(pending_urls, "http://www.upv.es", processed_urls)
     for iter in range(MAX):
         url = get_next_url(pending_urls)
@@ -210,7 +232,7 @@ if __name__ == "__main__":
         if page is not None:
             urlid = add_processed_url(processed_urls, url)
             text = extract_text(page)
-            add_to_index(inverted_index, urlid, text)
+            add_to_index(inverted_index, urlid, text, duplicate_control)
             url_list = extract_urls(page, url)
             for new_url in url_list:
                 add_pending_url(pending_urls, new_url, processed_urls)
