@@ -109,9 +109,9 @@ def add_pending_url(url_queue, url, url_dic):
     added = False
 
     is_in_list = url in url_queue
-    is_in_dict = id(url) in url_dic
+    is_in_dict = url in url_dic.values()
 
-    if (not is_in_list or not is_in_dict):
+    if (not is_in_list and not is_in_dict):
 
         url_queue.append(url)
         added = True
@@ -135,7 +135,7 @@ def add_to_index(index, urlid, text):
 
     for token in text.split():
         processed_terms += 1
-        index.setdefault(token,[]).append(urlid)
+        index.setdefault(token,set()).add(urlid)
     
     return processed_terms
 
@@ -151,7 +151,7 @@ def get_posting(index, dic, term):
             list: una lista con las urls donde aparece term, None si el termino no esta en el indice invertido
     """
     result_list = []
-    docid_list = index.get(term, [])
+    docid_list = list(index.get(term, []))
     for docid in docid_list:
         result_list.append(dic[docid])
     if len(result_list) == 0:
