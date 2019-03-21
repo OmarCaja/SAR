@@ -135,7 +135,7 @@ def add_to_index(index, urlid, text):
 
     for token in text.split():
         processed_terms += 1
-        index[token] = index.setdefault(token, []).append(urlid)
+        index.setdefault(token,[]).append(urlid)
     
     return processed_terms
 
