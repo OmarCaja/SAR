@@ -246,8 +246,9 @@ if __name__ == "__main__":
 
         elif (cortesia[cortesia_count] >= num_max_peticiones):
             
-            add_pending_url(pending_urls, url, processed_urls)
-            url = get_next_url(pending_urls)
+            while (url == cortesia[cortesia_url]):
+                add_pending_url(pending_urls, url, processed_urls)
+                url = get_next_url(pending_urls)
 
         cortesia[cortesia_count] += 1
 
