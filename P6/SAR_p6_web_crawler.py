@@ -150,8 +150,14 @@ def get_posting(index, dic, term):
         Returns:
             list: una lista con las urls donde aparece term, None si el termino no esta en el indice invertido
     """
-    # COMPLETAR
-    pass
+    result_list = []
+    docid_list = index.get(term, [])
+    for docid in docid_list:
+        result_list.append(dic[docid])
+    if len(result_list) == 0:
+        return None
+    else: 
+        return result_list
 
 
 ###############
