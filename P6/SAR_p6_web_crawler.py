@@ -8,11 +8,6 @@ Ampliaciones implementadas
     El control de duplicados se ha implementado almacenando los hashes de los textos procesados
     de forma que cuando se va a procesar un nuevo texto se computa su hash y se comprueba que no exista
     si existe el texto se deja sin procesar.
-
-- Cortesía:
-    Obtenemos el nombre del host en la variable: base_url a su vez se ha definifo un número máximo de 
-    peticiones ha realizar al mismo servidor, si el número de peticiones sobrepasa ese umbral se encola esa url
-    y se extrae una nueva de la cola de urls.
 '''
 
 import bs4
@@ -229,29 +224,9 @@ if __name__ == "__main__":
     inverted_index, processed_urls, pending_urls, duplicate_control, cortesia = {}, {}, [], [], ["",0]
     add_pending_url(pending_urls, "http://www.upv.es", processed_urls)
 
-    cortesia_url = 0
-    cortesia_count = 1
-    num_max_peticiones = 1
-
     for iter in range(MAX):
         url = get_next_url(pending_urls)
         print('(%d)' % iter, end=' ')
-
-        base_url = "{0.scheme}://{0.netloc}/".format(urlsplit(url))
-
-        if (cortesia[cortesia_url] != base_url):
-
-            cortesia[cortesia_url] = base_url
-            cortesia[cortesia_count] = 0
-
-        elif (cortesia[cortesia_count] >= num_max_peticiones):
-            
-            while (url == cortesia[cortesia_url]):
-                add_pending_url(pending_urls, url, processed_urls)
-                url = get_next_url(pending_urls)
-
-        cortesia[cortesia_count] += 1
-
         page = download_web(url)
         if page is not None:
             urlid = add_processed_url(processed_urls, url)
