@@ -8,9 +8,6 @@ Nombre Alumno: Omar Caja García
 
 import sys
 
-
-import sys
-
 args = sys.argv
 
 punctuation_marks = [',', ';', '.', '?', '!']
